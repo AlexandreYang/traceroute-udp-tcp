@@ -15,7 +15,7 @@ func main() {
 	ip := net.ParseIP("1.1.1.1")
 	tcpTraceroute := tcp.New(ip, methods.TracerouteConfig{
 		MaxHops:          12,
-		NumMeasurements:  1,
+		NumMeasurements:  3,
 		ParallelRequests: 1,
 		Port:             53,
 		Timeout:          time.Second / 2,
@@ -49,8 +49,11 @@ func printResults(res *map[uint16][]methods.TracerouteHop) {
 	}
 	sort.Ints(keys)
 	for _, key := range keys {
-		value := (*res)[uint16(key)]
-		fmt.Printf("%d: %+v\n", key, value)
+		measures := (*res)[uint16(key)]
+		fmt.Printf("%d\n", key)
+		for _, measure := range measures {
+			fmt.Printf("  %+v\n", measure)
+		}
 	}
 	//fmt.Printf("%d: %+v\n", key, value)
 }
